@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <link rel="stylesheet" href="upload.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            width: 100%;
+            max-width: 500px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        label, input, button {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            form {
+                padding: 15px;
+            }
+
+            label, input, button {
+                font-size: 0.9em;
+            }
+
+            button {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload a File</h1>
+    <form id="uploadForm" enctype="multipart/form-data" method="post" action="/upload">
+        <input type="hidden" id="userId" name="userId"> <!-- Hidden input for userId -->
+        <label for="fileInput">Choose a file:</label>
+        <input type="file" id="fileInput" name="file" required>
+        
+        <label for="fileSem">Enter semester:</label>
+        <input type="number" id="fileSem" name="sem" required>
+        
+        <label for="branch">Enter branch:</label>
+        <input type="text" id="branch" name="branch" required>
+        
+        <label for="regulation">Enter regulation:</label>
+        <input type="text" id="regulation" name="regulation" required>
+        
+        <label for="filename">Enter filename:</label>
+        <input type="text" name="filename" placeholder="Enter filename" required>
+        
+        <button type="submit">Upload</button>
+    </form>
+
+    <script>
+        // Function to get query parameter value by name
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Set the userId in the hidden input field
+        document.getElementById('userId').value = getQueryParam('userId');
+        
+        // Debugging log to ensure userId is correctly set
+        console.log('userId:', document.getElementById('userId').value);
+
+        // Verify form data before submission
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            const formData = new FormData(this);
+            console.log('Form Data:', Object.fromEntries(formData.entries())); // Debugging log
+        });
+    </script>
+</body>
+</html>

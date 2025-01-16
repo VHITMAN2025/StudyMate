@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Management</title>
+    <link rel="stylesheet" href="upload.css">
+    <style>
+        .profile-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            text-align: right;
+            z-index: 10; /* Ensure it stays on top */
+        }
+
+        .profile-icon {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .profile-icon img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid rgb(224, 211, 211);
+            margin-right: 10px;
+        }
+
+        /* Existing File List Container */
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px auto;
+            width: 90%; /* Increased width for mobile */
+            max-width: 600px; /* Limit the width of the container */
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        ul li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px; /* Reduced padding to make it more compact */
+            border-bottom: 1px solid #ddd;
+        }
+
+        ul li:last-child {
+            border-bottom: none;
+        }
+
+        ul li a {
+            text-decoration: none;
+            color: #007bff;
+            transition: color 0.3s ease;
+            flex: 1; /* Allow link to take available space */
+        }
+
+        ul li button {
+            margin-left: 10px; /* Add margin between link and button */
+        }
+
+        /* Delete Button */
+        button.delete-btn {
+            background: #ff4d4d;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: auto; /* Ensure button width is based on content */
+            display: inline-block;
+        }
+
+        button.delete-btn:hover {
+            background: #ff1a1a;
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 70px;
+            right: 0;
+            background-color: white;
+            border: 1px solid #d69a9a;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 220px;
+            z-index: 100;
+            color: black;
+        }
+
+        .profile-dropdown h2,
+        .profile-dropdown h3 {
+            margin: 10px 20px;
+            font-size: 1rem;
+        }
+
+        .profile-dropdown label,
+        .profile-dropdown input {
+            margin: 10px 20px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .profile-container {
+                top: 10px; /* Adjust top position for smaller screens */
+                right: 10px; /* Adjust right position for smaller screens */
+            }
+
+            .profile-dropdown {
+                width: 80%;
+                right: 10%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .profile-icon img {
+                width: 40px;
+                height: 40px;
+            }
+            .profile-dropdown h2, .profile-dropdown h3 {
+                font-size: 0.9rem;
+                margin: 8px 16px;
+            }
+        }
+    </style>
+    <script>
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        async function fetchFiles() {
+            const userId = getQueryParam('userId');
+            const response = await fetch(`/files?userId=${userId}`);
+            const files = await response.json();
+            const fileList = document.getElementById('fileList');
+
+            fileList.innerHTML = '';
+            files.forEach(file => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `<a href="/view-file/${file._id}">${file.filename}</a>
+                                      <button class="delete-btn" onclick="confirmDeleteFile('${file._id}')">Delete</button>`;
+                fileList.appendChild(listItem);
+            });
+        }
+
+        async function confirmDeleteFile(fileId) {
+            const confirmation = confirm("Are you sure you want to delete this file?");
+            if (confirmation) {
+                deleteFile(fileId);
+            }
+        }
+
+        async function deleteFile(fileId) {
+            const response = await fetch(`/delete-file/${fileId}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                alert('File deleted successfully!');
+                fetchFiles();
+            } else {
+                alert('Failed to delete the file.');
+            }
+        }
+
+        window.onload = fetchFiles;
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const userId = getQueryParam('userId');
+            document.getElementById('userId').value = userId;
+            console.log('userId:', userId); 
+
+            fetchUsername(userId);
+        });
+
+        async function fetchUsername(userId) {
+            try {
+                const response = await fetch(`/get-username/${userId}`);
+                if (!response.ok) throw new Error('Failed to fetch username');
+                const data = await response.json();
+                const profileName = document.getElementById("profile-name");
+                profileName.textContent = data.username ? data.username : "User";
+            } catch (err) {
+                console.error('Error fetching username:', err);
+            }
+        }
+
+        function toggleDropdown() {
+            const dropdown = document.getElementById("profile-dropdown");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            alert(result.message);
+            fetchFiles(); 
+        });
+    </script>
+</head>
+<body>
+    <h1>File Management</h1>
+
+    <h2>Upload a File</h2>
+    <form id="uploadForm" enctype="multipart/form-data" method="post" action="/upload">
+        <input type="hidden" id="userId" name="userId">
+        <label for="fileInput">Choose a file:</label>
+        <input type="file" id="fileInput" name="file" required style="color: black;">
+        <label for="filename">Filename:</label>
+        <input type="text" id="filename" name="filename" required>
+        <label for="fileSem">Enter semester:</label>
+        <input type="number" id="fileSem" name="sem" min="0" max="8" required>
+
+        <div class="form-group">
+            <label for="branch">Select Branch:</label>
+            <select id="branch" name="branch" required>
+                <option value="CSD">CSD</option>
+                <option value="CSM">CSM</option>
+                <option value="CIC">CIC</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="regulation">Select regulation:</label>
+            <select id="regulation" name="regulation" required>
+                <option value="A23" style="color:red">A23</option>
+                <option value="R23">R23</option>
+                <option value="R24">R24</option>
+            </select>
+        </div>
+        
+        <button type="submit">Upload</button>
+    </form>
+
+    <h2>Existing Files</h2>
+    <ul id="fileList"></ul>
+
+    <div id="profile-dropdown" class="profile-dropdown">
+        <h2 id="profile-name" style="color: black;">User</h2>
+        <h3 style="text-align: center;">Faculty</h3>
+    </div>
+
+    <div class="profile-container">
+        <div class="profile-icon" onclick="toggleDropdown()">
+            <img id="profile-img" src="https://www.pngall.com/wp-content/uploads/5/Profile-Transparent.png" alt="Profile Picture">
+            <span style="color: rgb(195, 0, 255);">▼</span>
+        </div>
+    </div>
+</body>
+</html>
