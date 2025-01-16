@@ -2,16 +2,48 @@
 <html>
 <head>
     <title>File Upload</title>
-    <link rel="stylesheet" href="upload..css">
+    <link rel="stylesheet" href="upload.css">
 </head>
 <body>
     <h1>Upload a File</h1>
     <form id="uploadForm" enctype="multipart/form-data" method="post" action="/upload">
+        <input type="hidden" id="userId" name="userId"> <!-- Hidden input for userId -->
         <label for="fileInput">Choose a file:</label>
-        <input type="file" id="fileInput" name="file">
+        <input type="file" id="fileInput" name="file" required>
+        
         <label for="fileSem">Enter semester:</label>
-        <input type="number" id="fileSem" name="sem">
+        <input type="number" id="fileSem" name="sem" required>
+        
+        <label for="branch">Enter branch:</label>
+        <input type="text" id="branch" name="branch" required>
+        
+        <label for="regulation">Enter regulation:</label>
+        <input type="text" id="regulation" name="regulation" required>
+        
+        <label for="filename">Enter filename:</label>
+        <input type="text" name="filename" placeholder="Enter filename" required>
+        
         <button type="submit">Upload</button>
     </form>
+
+    <script>
+        // Function to get query parameter value by name
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        // Set the userId in the hidden input field
+        document.getElementById('userId').value = getQueryParam('userId');
+        
+        // Debugging log to ensure userId is correctly set
+        console.log('userId:', document.getElementById('userId').value);
+
+        // Verify form data before submission
+        document.getElementById('uploadForm').addEventListener('submit', function(event) {
+            const formData = new FormData(this);
+            console.log('Form Data:', Object.fromEntries(formData.entries())); // Debugging log
+        });
+    </script>
 </body>
 </html>

@@ -4,31 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File Management</title>
-    <link rel="stylesheet" href="upload..css">
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const username = localStorage.getItem("username");
-            const profileName = document.getElementById("profile-name");
-            profileName.textContent = username ? username : "User"; // Fallback to "User" if no name is found
-        });
-        function toggleDropdown() {
-            const dropdown = document.getElementById("profile-dropdown");
-            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+    <link rel="stylesheet" href="upload.css">
+    <style>
+        .profile-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            text-align: right;
         }
-      
-        function updateProfilePicture(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const profileImg = document.getElementById("profile-img");
-                    profileImg.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-          }
+
+        .profile-icon {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .profile-icon img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid rgb(224, 211, 211);
+            margin-right: 10px;
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 70px;
+            right: 0;
+            background-color: white;
+            border: 1px solid #d69a9a;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 220px;
+            z-index: 100;
+            color: black;
+        }
+
+        .profile-dropdown h2,
+        .profile-dropdown h3 {
+            margin: 10px 20px;
+            font-size: 1rem;
+        }
+
+        .profile-dropdown label,
+        .profile-dropdown input {
+            margin: 10px 20px;
+        }
+    </style>
+    <script>
+        // Function to get query parameter value by name
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
         async function fetchFiles() {
-            const response = await fetch('/files');
+            const userId = getQueryParam('userId');
+            const response = await fetch(`/files?userId=${userId}`);
             const files = await response.json();
             const fileList = document.getElementById('fileList');
 
@@ -36,9 +69,16 @@
             files.forEach(file => {
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `<a href="/view-file/${file._id}">${file.filename}</a>
-                    <button class="delete-btn" onclick="deleteFile('${file._id}')">Delete</button>`;
+                                      <button class="delete-btn" onclick="confirmDeleteFile('${file._id}')">Delete</button>`;
                 fileList.appendChild(listItem);
             });
+        }
+
+        async function confirmDeleteFile(fileId) {
+            const confirmation = confirm("Are you sure you want to delete this file?");
+            if (confirmation) {
+                deleteFile(fileId);
+            }
         }
 
         async function deleteFile(fileId) {
@@ -54,71 +94,65 @@
         }
 
         window.onload = fetchFiles;
+
+        // Set the userId in the hidden input field
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const userId = getQueryParam('userId');
+            document.getElementById('userId').value = userId;
+            console.log('userId:', userId); // Debugging log
+
+            // Fetch and display username
+            fetchUsername(userId);
+        });
+
+        async function fetchUsername(userId) {
+            try {
+                const response = await fetch(`/get-username/${userId}`);
+                if (!response.ok) throw new Error('Failed to fetch username');
+                const data = await response.json();
+                const profileName = document.getElementById("profile-name");
+                profileName.textContent = data.username ? data.username : "User";
+            } catch (err) {
+                console.error('Error fetching username:', err);
+            }
+        }
+
+        function toggleDropdown() {
+            const dropdown = document.getElementById("profile-dropdown");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        // Verify form data before submission
+        document.getElementById('uploadForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            const formData = new FormData(this);
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            alert(result.message); // Show alert message
+            fetchFiles(); 
+        });
     </script>
-    <style>
-        .profile-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            text-align: right;
-        }
-        
-        .profile-icon {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-        
-        .profile-icon img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid rgb(224, 211, 211);
-            margin-right: 10px;
-        }
-        
-        .profile-dropdown {
-            display: none;
-            position: absolute;
-            top: 70px;
-            right: 0;
-            background-color: white;
-            border: 1px solid #d69a9a;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            width: 220px;
-            z-index: 100;
-            color: black;
-        }
-        
-        .profile-dropdown h2,
-        .profile-dropdown h3 {
-            margin: 10px 20px;
-            font-size: 1rem;
-        }
-        
-        .profile-dropdown label,
-        .profile-dropdown input {
-            margin: 10px 20px;
-        }
-    </style>
 </head>
 <body>
-
     <h1>File Management</h1>
 
     <h2>Upload a File</h2>
     <form id="uploadForm" enctype="multipart/form-data" method="post" action="/upload">
+        <input type="hidden" id="userId" name="userId"> <!-- Hidden input for userId -->
         <label for="fileInput">Choose a file:</label>
-        <input type="file" id="fileInput" name="file">
+        <input type="file" id="fileInput" name="file" required style="color: black;">
         <label for="filename">Filename:</label>
-        <input type="text" id="filename" name="filename">
+        <input type="text" id="filename" name="filename" required>
         <label for="fileSem">Enter semester:</label>
-        <input type="number" id="fileSem" name="sem" min="0" max="8">
+        <input type="number" id="fileSem" name="sem" min="0" max="8" required>
 
         <div class="form-group">
             <label for="branch">Select Branch:</label>
-            <select id="branch" name="branch">
+            <select id="branch" name="branch" required>
                 <option value="CSD">CSD</option>
                 <option value="CSM">CSM</option>
                 <option value="CIC">CIC</option>
@@ -127,28 +161,29 @@
 
         <div class="form-group">
             <label for="regulation">Select regulation:</label>
-            <select id="regulation" name="regulation">
-                <option value="A23" style="color:rgb(245, 155, 155)">A23</option>
-                <option value="R23" style="color:rgb(245, 155, 155)">R23</option>
-                <option value="R24" style="color:rgb(245, 155, 155)">R24</option>
+            <select id="regulation" name="regulation" required>
+                <option value="A23" style="color:red">A23</option>
+                <option value="R23">R23</option>
+                <option value="R24">R24</option>
             </select>
         </div>
         
         <button type="submit">Upload</button>
-    
     </form>
+
     <h2>Existing Files</h2>
     <ul id="fileList"></ul>
+
     <div id="profile-dropdown" class="profile-dropdown">
-        <h2 id="profile-name"> user</h2>
-        <h3>Software Engineer</h3>
-        <label for="profile-pic-upload">Change Picture:</label>
-        <input id="profile-pic-upload" type="file" accept="image/*" onchange="updateProfilePicture(event)">
+        <h2 id="profile-name" style="color: black;">User</h2>
+        <h3 style="text-align: center;">Faculty</h3>
     </div>
+
     <div class="profile-container">
         <div class="profile-icon" onclick="toggleDropdown()">
-            <img id="profile-img" src="c:\Users\WELCOME\OneDrive\Desktop\mvgr website\yoshitha\page1\New folder\Project-main\mvgr.png" alt="Profile Picture">
+            <img id="profile-img" src="https://www.pngall.com/wp-content/uploads/5/Profile-Transparent.png" alt="Profile Picture">
             <span style="color: rgb(195, 0, 255);">▼</span>
         </div>
+    </div>
 </body>
 </html>

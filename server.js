@@ -7,23 +7,21 @@ const path = require('path');
 const app = express();
 const port = 8000;
 
-// MongoDB Atlas connection URL
 const mongoURI = 'mongodb+srv://HITMAN:HITMAN2025@cluster0.mo4bh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 mongoose.connect(mongoURI)
   .then(() => console.log('MongoDB Atlas connected successfully'))
   .catch(err => console.error(err));
-
-// Define schemas and models
-const fileSchema = mongoose.Schema({
-  name: String,
-  filename: String,
-  data: Buffer,
-  contentType: String,
-  sem: Number,
-  branch: String,
-  regulation: String
-});
-
+  const fileSchema = mongoose.Schema({
+    name: String,
+    filename: String,
+    data: Buffer,
+    contentType: String,
+    sem: Number,
+    branch: String,
+    regulation: String,
+    uploadedBy: String // Ensure this field is included
+  });
+  
 const userSchema = new mongoose.Schema({
   username: String,
   password: String,
@@ -32,14 +30,12 @@ const userSchema = new mongoose.Schema({
 const File = mongoose.model('File', fileSchema);
 const User = mongoose.model('User', userSchema);
 
-// Configure multer for file uploads
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Routes for file management
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'login_page.html'));
 });
@@ -73,17 +69,14 @@ app.get('/semesters', async (req, res) => {
   res.sendFile(path.join(__dirname, 'semesters.html'));
 });
 
-// Route to serve branches based on regulation
 app.get('/:regulation/branch', async (req, res) => {
   res.sendFile(path.join(__dirname, 'branch.html'));
 });
 
-// Route to serve semesters based on regulation and branch
 app.get('/:regulation/branch/:branch', async (req, res) => {
   res.sendFile(path.join(__dirname, 'semesters.html'));
 });
 
-// Route to serve files based on regulation, branch, and semester
 app.get('/:regulation/branch/:branch/sem/:sem', async (req, res) => {
   const regulation = req.params.regulation;
   const branch = req.params.branch;
@@ -99,10 +92,13 @@ app.get('/:regulation/branch/:branch/sem/:sem', async (req, res) => {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Files for Regulation ${regulation}, Branch ${branch}, and Semester ${sem}</title>
         <style>
-          body { color: red; }
+          body { 
+          color: black; 
+           background: linear-gradient(135deg, #b32271, #d5d818);
+          }
           table { width: 100%; border-collapse: collapse; }
           table, th, td { border: 1px solid black; }
-          th, td { padding: 10px; text-align: left; }
+          th, td { padding: 10px; text-align: left; font-size : 25px;}
         </style>
       </head>
       <body>
@@ -136,13 +132,13 @@ app.get('/:regulation/branch/:branch/sem/:sem', async (req, res) => {
   }
 });
 
-
+// test driven code
 app.get('/regulation/:/regulation/branch/sem/:sem', async (req, res) => {
   const sem = req.params.sem;
   const branch = req.params.branch;
   const regulation = req.params.regulation;
   try {
-    // Modify the query to include both semester and branch conditions
+
     const files = await File.find({ regulations: regulation ,sem: sem, branch: branch }, 'filename _id');
     let fileListHTML = `
       <!DOCTYPE html>
@@ -153,7 +149,7 @@ app.get('/regulation/:/regulation/branch/sem/:sem', async (req, res) => {
         <title>Files for Branch ${branch} and Semester ${sem}</title>
         <style>
           body {
-            color: red;
+            color: black;
           }
           table {
             width: 100%;
@@ -199,11 +195,25 @@ app.get('/regulation/:/regulation/branch/sem/:sem', async (req, res) => {
   }
 });
 
+app.get('/get-username/:id', async (req, res) => {
+  const userId = req.params.id; // Extracting the ID from the URL parameters
+  try {
+    const user = await User.findById(userId); // Fetching the user by ID
+    if (user) {
+      res.json({ username: user.username });
+    } else {
+      res.status(404).send('User not found');
+    }
+  } catch (err) {
+    res.status(500).send('Error fetching username');
+  }
+});
+
+
 app.get('/sem/:sem', async (req, res) => {
   const sem = req.params.sem;
-  const branch = req.query.branch; // Capture the branch from query parameters
+  const branch = req.query.branch; 
   try {
-    // Modify the query to include both semester and branch conditions
     const files = await File.find({ sem: sem, branch: branch }, 'name _id');
     let fileListHTML = `
       <!DOCTYPE html>
@@ -266,27 +276,44 @@ app.post('/upload', upload.single('file'), (req, res) => {
   const branch = req.body.branch;
   const regulation = req.body.regulation;
   const filename = req.body.filename;
+  const uploadedBy = req.body.userId;
+
   if (!file) {
     return res.status(400).send('No file uploaded.');
   }
 
-  const newFile = new File({
-    name: file.originalname,
-    filename: filename,
-    data: file.buffer,
-    contentType: file.mimetype,
-    sem: sem,
-    branch: branch,
-    regulation: regulation
-  });
+  File.findOne({ filename: filename })
+    .then(existingFile => {
+      if (existingFile) {
+        return res.status(400).send('File with this filename already exists.');
+      }
 
-  newFile.save()
-    .then(savedFile => res.send(`File uploaded and inserted successfully! File ID: ${savedFile._id}`))
+      const newFile = new File({
+        name: file.originalname,
+        filename: filename,
+        data: file.buffer,
+        contentType: file.mimetype,
+        sem: sem,
+        branch: branch,
+        regulation: regulation,
+        uploadedBy: uploadedBy
+      });
+
+      return newFile.save();
+    })
+    .then(savedFile => {
+      if (savedFile) {
+        res.send(`File uploaded and inserted successfully!`)
+      }
+    })
     .catch(err => {
       console.error('Error saving file:', err);
-      res.status(500).send('Internal Server Error');
+      if (!res.headersSent) {
+        res.status(500).send('Internal Server Error');
+      }
     });
 });
+
 
 app.get('/view-file/:id', async (req, res) => {
   const fileId = req.params.id;
@@ -303,7 +330,6 @@ app.get('/view-file/:id', async (req, res) => {
   }
 });
 
-// Delete a file by ID
 app.delete('/delete-file/:id', async (req, res) => {
   const fileId = req.params.id;
   try {
@@ -319,8 +345,9 @@ app.delete('/delete-file/:id', async (req, res) => {
 });
 
 app.get('/files', async (req, res) => {
+  const userId = req.query.userId;
   try {
-    const files = await File.find({}, 'filename _id');
+    const files = await File.find({ uploadedBy: userId }, 'filename _id');
     res.json(files);
   } catch (err) {
     console.error('Error fetching files:', err);
@@ -328,7 +355,7 @@ app.get('/files', async (req, res) => {
   }
 });
 
-// Routes for user management and authentication
+
 app.get('/signup', (req, res) => {
   res.sendFile(path.join(__dirname, 'signup.html'));
 });
@@ -340,33 +367,56 @@ app.get('/login', (req, res) => {
 app.post('/submit', (req, res) => {
   const { username, password } = req.body;
   const newUser = new User({ username, password });
-  newUser.save()
+
+  
+  User.findOne({ username: username })
+    .then(existingFile => {
+      if (existingFile) {
+        return res.status(400).send('User already exists try log in');
+      }
+      else
+      {
+        newUser.save()
     .then(() => {
-      res.status(200).send(`Username: ${username}, Password: ${password} saved successfully`);
+      // res.status(200).send(`Username: ${username}, Password: ${password} saved successfully`);
+       res.sendFile(path.join(__dirname,'login_page.html'))
     })
     .catch(err => {
       res.status(500).send('Error saving user data');
     });
+  }
+      })
 });
-
 app.post('/login', (req, res) => {
+  const teachers = ['vijay','yoshitha'];
   const { username, password } = req.body;
   User.findOne({ username, password })
     .then(user => {
       if (user) {
-        if (username === 'vijay') {
-          res.redirect('/file-management'); 
+        const userId = user._id; // Assuming '_id' is the user ID field in your database
+        if (teachers.includes(username)) {
+          res.redirect(`/file-management?userId=${userId}`); 
         } else {
-          res.redirect('/regulations');
+          res.redirect(`/regulations?userId=${userId}`);
         }
       } else {
         res.status(401).send(`
-          <html>
-            <head><title>Login Status</title></head>
-            <body>
-              <h1>Invalid username or password</h1>
-            </body>
-          </html>
+         <html>
+<head>
+    <title>Login Status</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #b32271, #d5d818);
+        }
+        h1 {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Invalid username or password</h1>
+</body>
+</html>
         `);
       }
     })
@@ -374,6 +424,7 @@ app.post('/login', (req, res) => {
       res.status(500).send('Error logging in');
     });
 });
+
 
 app.use((req, res) => {
   res.status(404).send('Not found');

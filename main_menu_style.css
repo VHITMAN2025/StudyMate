@@ -11,43 +11,34 @@ body {
   }
   
   .container {
-    background-color: rgba(252, 239, 239, 0.9); /* Slightly transparent white background */
+    background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent white background */
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    width: 50%;
+    box-shadow: 0 0 10px rgba(66, 248, 21, 0.1);
+    width: 85%;
     max-width: 1000px; /* Limits the width on larger screens */
     height: 80vh;
     margin: 10px; /* Adds some margin on smaller screens */
     display: flex; /* Enable flexbox */
     flex-wrap: wrap; /* Allow items to wrap to the next line if necessary */
-    justify-content: space-evenly; /* Distribute space evenly */
-    align-content:flex-start;
-    overflow-y: auto;  
+    justify-content: space-around; /* Distribute space evenly */
   }
   
   h1 {
     text-align: center;
     width: 100%; /* Ensure the heading takes the full width */
-    margin: 0 0 20px 0;
-    font-size: 2rem;
-    color: rgb(207,133,21);  
-    }
-  .block {
-    color: rgb(3, 112, 5);
-    background-color: wheat;
-    text-align: center;
-    padding: 10px; /* Uniform padding */
-    border-radius: 8px; /* Adjusted border radius for better visuals */
-    font-size: 1.5rem; /* Scalable font size */
-    width: 30%; /* Maintain consistent width */
-    min-width: 200px; /* Ensure a minimum width for smaller screens */
-    margin: 10px; /* Consistent spacing around blocks */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add slight shadow for depth */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add smooth hover effects */
   }
   
-  .block:hover {
-    transform: translateY(-5px); /* Slight lift on hover */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
+  .block {
+    color: rgb(3, 112, 5);
+    padding-right: 3px;
+    background-color: wheat;
+    text-align: center;
+    height: 30px;
+    padding-bottom: 15px;
+    border-radius: 10cap;
+    font-size: 35px;
+    width: 30%; /* Set a fixed width for each block */
+    margin: 10px 0; /* Add some margin */
   }
+  
