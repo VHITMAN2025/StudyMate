@@ -4,24 +4,144 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Regulations</title>
-</head>
 <script>
     function gotoregulation(regulations) {
         window.location.href = `/${regulations}/branch`;
     }
+    
 </script>
 <style>
-  p {
-    background-color: bisque;
-    width: 30px;
-  }
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to bottom right, #5fd6eb, #fb8fed);
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header Styling */
+h1 {
+    text-align: center;
+    color: white;
+    margin-top: 20px;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Content Container */
+.container {
+    margin: 20px auto;
+    background: rgba(209, 150, 150, 0.15);
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 600px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.container p {
+    background-color: rgba(228, 187, 169, 0.8);
+    color: black;
+    display: inline-block;
+    width: 60px;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.container p:hover {
+    background-color: rgb(154, 207, 199);
+    transform: scale(1.1);
+}
+
+/* Profile Section */
+.profile-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    text-align: right;
+}
+
+.profile-icon {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.profile-icon img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid rgb(224, 211, 211);
+    margin-right: 10px;
+}
+
+.profile-dropdown {
+    display: none;
+    position: absolute;
+    top: 70px;
+    right: 0;
+    background-color: white;
+    border: 1px solid #d69a9a;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    width: 220px;
+    z-index: 100;
+    color: black;
+}
+
+.profile-dropdown h2,
+.profile-dropdown h3 {
+    margin: 10px 20px;
+    font-size: 1rem;
+}
+
+.profile-dropdown label,
+.profile-dropdown input {
+    margin: 10px 20px;
+}
+
+.login-container {
+    text-align: center;
+    margin: 20px auto;
+}
+
+.login-container input {
+    padding: 10px;
+    margin: 5px;
+    width: 200px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.login-container button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #df7c94;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-container button:hover {
+    background-color: #79caf0;
+}
 </style>
+</head>
 <body>
-     <h1>Regulations</h1>   
-     <div class="container">
-     <p onclick="gotoregulation('A23')">A23</p>
-     <p onclick="gotoregulation('R23')">R23</p>
-     <p onclick="gotoregulation('R24')">R24</p>
-     </div>
+      <h1>Regulations</h1>   
+      <div class="container">
+      <p onclick="gotoregulation('A23')">A23</p>
+      <p onclick="gotoregulation('R23')">R23</p>
+      <p onclick="gotoregulation('R24')">R24</p>
+      </div>
 </body>
 </html>

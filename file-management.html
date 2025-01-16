@@ -4,148 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File Management</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #333;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #videoBackground {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-        }
-
-        h1, h2 {
-            text-align: center;
-            margin: 20px 0;
-            color: #fff;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 20px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-        }
-
-        .form-group {
-            display: flex;
-            align-items: center;
-            margin: 10px 0;
-        }
-
-        form label {
-            margin: 10px 0 5px;
-            font-size: 1.1em;
-        }
-
-        form input, form button, form select {
-            width: 100%;
-            max-width: 300px;
-            margin: 5px 0;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1em;
-        }
-
-        form button {
-            background: #4caf50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        form button:hover {
-            background: #45a049;
-        }
-
-        ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 20px auto;
-            max-width: 600px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        ul li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        ul li:last-child {
-            border-bottom: none;
-        }
-
-        ul li a {
-            text-decoration: none;
-            color: #007bff;
-            transition: color 0.3s;
-        }
-
-        ul li a:hover {
-            color: #0056b3;
-        }
-
-        button.delete-btn {
-            background: #ff4d4d;
-            color: white;
-            border: none;
-            cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 5px;
-            transition: background 0.3s;
-        }
-
-        button.delete-btn:hover {
-            background: #ff1a1a;
-        }
-
-        @media (max-width: 768px) {
-            form, ul {
-                margin: 10px;
-                padding: 15px;
-            }
-
-            form input, form button, form select {
-                max-width: 100%;
-            }
-
-            .form-group {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-
-        option {
-            color: red;
-        }
-    </style>
+    <link rel="stylesheet" href="upload..css">
     <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const username = localStorage.getItem("username");
+            const profileName = document.getElementById("profile-name");
+            profileName.textContent = username ? username : "User"; // Fallback to "User" if no name is found
+        });
+        function toggleDropdown() {
+            const dropdown = document.getElementById("profile-dropdown");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+        }
+      
+        function updateProfilePicture(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const profileImg = document.getElementById("profile-img");
+                    profileImg.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+          }
         async function fetchFiles() {
             const response = await fetch('/files');
             const files = await response.json();
@@ -155,7 +36,7 @@
             files.forEach(file => {
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `<a href="/view-file/${file._id}">${file.filename}</a>
-                                      <button class="delete-btn" onclick="deleteFile('${file._id}')">Delete</button>`;
+                    <button class="delete-btn" onclick="deleteFile('${file._id}')">Delete</button>`;
                 fileList.appendChild(listItem);
             });
         }
@@ -174,12 +55,56 @@
 
         window.onload = fetchFiles;
     </script>
+    <style>
+        .profile-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            text-align: right;
+        }
+        
+        .profile-icon {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .profile-icon img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid rgb(224, 211, 211);
+            margin-right: 10px;
+        }
+        
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 70px;
+            right: 0;
+            background-color: white;
+            border: 1px solid #d69a9a;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 220px;
+            z-index: 100;
+            color: black;
+        }
+        
+        .profile-dropdown h2,
+        .profile-dropdown h3 {
+            margin: 10px 20px;
+            font-size: 1rem;
+        }
+        
+        .profile-dropdown label,
+        .profile-dropdown input {
+            margin: 10px 20px;
+        }
+    </style>
 </head>
 <body>
-    <video id="videoBackground" autoplay loop muted>
-        <source src="https://i.makeagif.com/media/12-27-2015/lv0Mb9.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
+
     <h1>File Management</h1>
 
     <h2>Upload a File</h2>
@@ -203,17 +128,27 @@
         <div class="form-group">
             <label for="regulation">Select regulation:</label>
             <select id="regulation" name="regulation">
-                <option value="A23" style="color:red">A23</option>
-                <option value="R23">R23</option>
-                <option value="R24">R24</option>
+                <option value="A23" style="color:rgb(245, 155, 155)">A23</option>
+                <option value="R23" style="color:rgb(245, 155, 155)">R23</option>
+                <option value="R24" style="color:rgb(245, 155, 155)">R24</option>
             </select>
         </div>
         
         <button type="submit">Upload</button>
-     
+    
     </form>
-
     <h2>Existing Files</h2>
     <ul id="fileList"></ul>
+    <div id="profile-dropdown" class="profile-dropdown">
+        <h2 id="profile-name"> user</h2>
+        <h3>Software Engineer</h3>
+        <label for="profile-pic-upload">Change Picture:</label>
+        <input id="profile-pic-upload" type="file" accept="image/*" onchange="updateProfilePicture(event)">
+    </div>
+    <div class="profile-container">
+        <div class="profile-icon" onclick="toggleDropdown()">
+            <img id="profile-img" src="c:\Users\WELCOME\OneDrive\Desktop\mvgr website\yoshitha\page1\New folder\Project-main\mvgr.png" alt="Profile Picture">
+            <span style="color: rgb(195, 0, 255);">▼</span>
+        </div>
 </body>
 </html>
