@@ -5,10 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Branch</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom right, #9a60f8, #e1f71b);
+            background-size: cover;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header Styling */
+        h1 {
+            text-align: center;
+            color: white;
+            margin-top: 20px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Content Container */
+        .container {
+            margin: 20px auto;
+            background: rgba(209, 150, 150, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 600px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        
         .container h3 {
+            background-color: rgba(228, 187, 169, 0.8);
+            color: black;
+            display: inline-block;
+            width: 60px;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 8px;
             cursor: pointer;
-            color: blue;
-            text-decoration: underline;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        
+        .container h3:hover {
+            background-color: rgb(190, 235, 69);
+            transform: scale(1.1);
         }
     </style>
   <script> 
