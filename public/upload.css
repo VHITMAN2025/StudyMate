@@ -1,0 +1,207 @@
+/* Global Styles */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #ca7a7a, #488afc); /* Gradient background */
+  background-size: cover;
+  height: 100vh; /* Full viewport height */
+  color: #161313;
+  flex-direction: column; /* Stack items vertically */
+}
+
+/* Title Styling */
+h1, h2 {
+  font-size: 2.5rem;
+  color: #0f0d0d;
+  text-align: center;
+  margin-top: 20px;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+/* Form Container */
+form {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%; /* Increased width for mobile */
+  max-width: 400px; /* Limit the width of the form */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box; /* Ensures padding is included in the element's total width */
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+}
+
+form label {
+  margin: 10px 0 4px;
+  font-size: 1.1em;
+}
+
+/* Input and Button Styles */
+form input, form button, form select {
+  width: 100%; /* Ensure inputs take the full width of the container */
+  margin: 6px 0;
+  padding: 10px; /* Increase padding for better readability */
+  border: 3px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+  box-sizing: border-box; /* Prevent elements from overflowing container */
+  transition: all 0.3s ease;
+}
+
+/* Input and Button States */
+input[type="file"], input[type="number"] {
+  padding: 10px;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+}
+
+input[type="file"]:focus, input[type="number"]:focus {
+  border-color: #6a11cb;
+  outline: none;
+}
+
+/* Button Styling */
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #6a11cb;
+  color: #fff;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  margin-top: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #2575fc;
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+  background-color: #4b86e8;
+}
+
+/* Delete Button */
+button.delete-btn {
+  background: #ff4d4d;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button.delete-btn:hover {
+  background: #ff1a1a;
+}
+
+/* Signup Message */
+#signup_msg {
+  margin-top: 15px;
+  font-size: 1rem;
+  color: #333;
+}
+
+#signup {
+  color: #6a11cb;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+#signup:hover {
+  color: #2575fc;
+}
+
+/* Unordered List Styling */
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px auto;
+  width: 90%; /* Increased width for mobile */
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+ul li:last-child {
+  border-bottom: none;
+}
+
+ul li a {
+  text-decoration: none;
+  color: #007bff;
+  transition: color 0.3s ease;
+}
+
+ul li a:hover {
+  color: #0056b3;
+}
+
+/* Floating Animation */
+@keyframes float {
+  0% {
+      transform: translateY(0);
+  }
+  50% {
+      transform: translateY(-10px); /* Reduced height for mobile */
+  }
+  100% {
+      transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  form, ul {
+      margin: 10px;
+      padding: 15px;
+  }
+
+  form input, form button, form select {
+      font-size: 0.9rem;
+  }
+
+  .form-group {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  h1 {
+      font-size: 2rem;
+  }
+
+  #signup_msg {
+      font-size: 0.9rem;
+  }
+}
+
+option {
+  color: red;
+}
