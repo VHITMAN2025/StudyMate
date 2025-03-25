@@ -520,7 +520,7 @@ app.post('/submit', (req, res) => {
       })
 });
 app.post('/login', (req, res) => {
-  const teachers = ['vijay', 'yoshitha'];
+  const teachers = ['vijay', 'yoshitha','harsha'];
   const { username, password } = req.body;
 
   User.findOne({ username, password })
