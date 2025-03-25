@@ -3,22 +3,14 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const bodyParser = require('body-parser');
 const path = require('path');
-<<<<<<< HEAD
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
-=======
-
->>>>>>> 950f7188e3f45caf8275562778803207258d46af
 const app = express();
 const port = 8000;
 
 const mongoURI = 'mongodb+srv://HITMAN:HITMAN2025@cluster0.mo4bh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 mongoose.connect(mongoURI)
-<<<<<<< HEAD
   .then(() => console.log('MongoDB Atlas connected successfully to web'))
-=======
-  .then(() => console.log('MongoDB Atlas connected successfully'))
->>>>>>> 950f7188e3f45caf8275562778803207258d46af
   .catch(err => console.error(err));
   const fileSchema = mongoose.Schema({
     name: String,
@@ -28,10 +20,7 @@ mongoose.connect(mongoURI)
     sem: Number,
     branch: String,
     regulation: String,
-<<<<<<< HEAD
     subject:String,
-=======
->>>>>>> 950f7188e3f45caf8275562778803207258d46af
     uploadedBy: String // Ensure this field is included
   });
   
@@ -49,7 +38,6 @@ const upload = multer({ storage: storage });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-<<<<<<< HEAD
 // Middleware for sessions
 app.use(session({
   secret: 'mySuperSecretKey123!@#', // Replace with a strong and unique secret key
@@ -67,42 +55,24 @@ function isAuthenticated(req, res, next) {
   res.redirect('/login');
 }
 
-=======
->>>>>>> 950f7188e3f45caf8275562778803207258d46af
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'login_page.html'));
 });
 
-<<<<<<< HEAD
 app.get('/file-management', isAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, 'file-management.html'));
 });
 
 app.get('/regulations', isAuthenticated,async(req,res) =>
-=======
-app.get('/file-management', (req, res) => {
-  res.sendFile(path.join(__dirname, 'file-management.html'));
-});
-
-app.get('/regulations',async(req,res) =>
->>>>>>> 950f7188e3f45caf8275562778803207258d46af
 {
   res.sendFile(path.join(__dirname,'regulations.html'));
 });
 
-<<<<<<< HEAD
 app.get('/branch', isAuthenticated, async (req, res) => {
   res.sendFile(path.join(__dirname, 'branch.html'));
 });
 
 app.get('/regulations/:regulation/branch/:branch',isAuthenticated, async (req, res) => {
-=======
-app.get('/branch', async (req, res) => {
-  res.sendFile(path.join(__dirname, 'branch.html'));
-});
-
-app.get('/regulations/:regulation/branch/:branch', async (req, res) => {
->>>>>>> 950f7188e3f45caf8275562778803207258d46af
   const regulation = req.params.regulation;
   const branch = req.params.branch;
   res.sendFile(path.join(__dirname, 'semesters.html'));
@@ -118,13 +88,10 @@ app.get('/semesters', async (req, res) => {
   res.sendFile(path.join(__dirname, 'semesters.html'));
 });
 
-<<<<<<< HEAD
 app.get('/subject', async (req, res) => {
   res.sendFile(path.join(__dirname, 'subjects.html'));
 });
 
-=======
->>>>>>> 950f7188e3f45caf8275562778803207258d46af
 app.get('/:regulation/branch', async (req, res) => {
   res.sendFile(path.join(__dirname, 'branch.html'));
 });
@@ -134,7 +101,6 @@ app.get('/:regulation/branch/:branch', async (req, res) => {
 });
 
 app.get('/:regulation/branch/:branch/sem/:sem', async (req, res) => {
-<<<<<<< HEAD
   res.sendFile(path.join(__dirname, 'subjects.html'));
 });
 
@@ -146,14 +112,6 @@ app.get('/:regulation/branch/:branch/sem/:sem/subject/:subject', async (req, res
 
   try {
     const files = await File.find({ regulation: regulation, sem: sem, branch: branch,subject: subject }, 'filename _id');
-=======
-  const regulation = req.params.regulation;
-  const branch = req.params.branch;
-  const sem = req.params.sem;
-
-  try {
-    const files = await File.find({ regulation: regulation, sem: sem, branch: branch }, 'filename _id');
->>>>>>> 950f7188e3f45caf8275562778803207258d46af
     let fileListHTML = `
       <!DOCTYPE html>
       <html lang="en">
@@ -284,7 +242,6 @@ app.get('/:regulation/branch/:branch/sem/:sem/subject/:subject', async (req, res
 });
 
 // test driven code
-<<<<<<< HEAD
 app.get('/regulation/:/regulation/branch/sem/:sem/subject/:subject', async (req, res) => {
   const sem = req.params.sem;
   const branch = req.params.branch;
@@ -293,15 +250,6 @@ app.get('/regulation/:/regulation/branch/sem/:sem/subject/:subject', async (req,
   try {
 
     const files = await File.find({ regulations: regulation ,sem: sem, branch: branch,subject: subject }, 'filename _id');
-=======
-app.get('/regulation/:/regulation/branch/sem/:sem', async (req, res) => {
-  const sem = req.params.sem;
-  const branch = req.params.branch;
-  const regulation = req.params.regulation;
-  try {
-
-    const files = await File.find({ regulations: regulation ,sem: sem, branch: branch }, 'filename _id');
->>>>>>> 950f7188e3f45caf8275562778803207258d46af
     let fileListHTML = `
       <!DOCTYPE html>
       <html lang="en">
@@ -356,7 +304,6 @@ app.get('/regulation/:/regulation/branch/sem/:sem', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-<<<<<<< HEAD
 app.put('/rename-file/:id', async (req, res) => {
   const fileId = req.params.id;
   const newFilename = req.body.filename;
@@ -376,8 +323,6 @@ app.put('/rename-file/:id', async (req, res) => {
 });
 
 
-=======
->>>>>>> 950f7188e3f45caf8275562778803207258d46af
 
 app.get('/get-username/:id', async (req, res) => {
   const userId = req.params.id; // Extracting the ID from the URL parameters
@@ -460,10 +405,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
   const branch = req.body.branch;
   const regulation = req.body.regulation;
   const filename = req.body.filename;
-<<<<<<< HEAD
   const subject = req.body.subject;
-=======
->>>>>>> 950f7188e3f45caf8275562778803207258d46af
   const uploadedBy = req.body.userId;
 
   if (!file) {
@@ -484,10 +426,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
         sem: sem,
         branch: branch,
         regulation: regulation,
-<<<<<<< HEAD
         subject:subject,
-=======
->>>>>>> 950f7188e3f45caf8275562778803207258d46af
         uploadedBy: uploadedBy
       });
 
@@ -580,7 +519,6 @@ app.post('/submit', (req, res) => {
       })
 });
 app.post('/login', (req, res) => {
-<<<<<<< HEAD
   const teachers = ['vijay', 'yoshitha'];
   const { username, password } = req.body;
 
@@ -591,22 +529,11 @@ app.post('/login', (req, res) => {
         const userId = user._id; // Assuming '_id' is the user ID field in your database
         if (teachers.includes(username)) {
           res.redirect(`/file-management?userId=${userId}`);
-=======
-  const teachers = ['vijay','yoshitha'];
-  const { username, password } = req.body;
-  User.findOne({ username, password })
-    .then(user => {
-      if (user) {
-        const userId = user._id; // Assuming '_id' is the user ID field in your database
-        if (teachers.includes(username)) {
-          res.redirect(`/file-management?userId=${userId}`); 
->>>>>>> 950f7188e3f45caf8275562778803207258d46af
         } else {
           res.redirect(`/regulations?userId=${userId}`);
         }
       } else {
         res.status(401).send(`
-<<<<<<< HEAD
           <html>
           <head>
               <title>Login Status</title>
@@ -623,24 +550,6 @@ app.post('/login', (req, res) => {
               <h1>Invalid username or password</h1>
           </body>
           </html>
-=======
-         <html>
-<head>
-    <title>Login Status</title>
-    <style>
-        body {
-            background: linear-gradient(135deg, #b32271, #d5d818);
-        }
-        h1 {
-            color: #ffffff;
-        }
-    </style>
-</head>
-<body>
-    <h1>Invalid username or password</h1>
-</body>
-</html>
->>>>>>> 950f7188e3f45caf8275562778803207258d46af
         `);
       }
     })
@@ -649,10 +558,6 @@ app.post('/login', (req, res) => {
     });
 });
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 950f7188e3f45caf8275562778803207258d46af
 app.use((req, res) => {
   res.status(404).send('Not found');
 });
