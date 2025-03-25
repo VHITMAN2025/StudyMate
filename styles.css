@@ -1,0 +1,94 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.header, .nav-bar {
+    background-color: #232F3E;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.logo {
+    font-size: 1.5em;
+    text-decoration: none;
+    color: white;
+}
+
+.search-bar {
+    width: 50%;
+    padding: 5px;
+}
+
+.search-button {
+    padding: 5px 10px;
+    background-color: #febd69;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+.hero-section {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.hero-image {
+    width: 100%;
+    max-width: 1200px;
+    height: auto;
+}
+
+.offers-section {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.offer {
+    display: inline-block;
+    width: 45%;
+    margin: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.offer img {
+    width: 100%;
+    height: auto;
+}
+
+.products-section {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+}
+
+.product {
+    text-align: center;
+    width: 30%;
+}
+
+.product img {
+    width: 100%;
+    height: auto;
+}
+
+footer {
+    background-color: #232F3E;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}

@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('main_menu_bg.jpeg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  .container {
+    background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent white background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(66, 248, 21, 0.1);
+    width: 85%;
+    max-width: 1000px; /* Limits the width on larger screens */
+    height: 80vh;
+    margin: 10px; /* Adds some margin on smaller screens */
+    display: flex; /* Enable flexbox */
+    flex-wrap: wrap; /* Allow items to wrap to the next line if necessary */
+    justify-content: space-around; /* Distribute space evenly */
+  }
+  
+  h1 {
+    text-align: center;
+    width: 100%; /* Ensure the heading takes the full width */
+  }
+  
+  .block {
+    color: rgb(3, 112, 5);
+    padding-right: 3px;
+    background-color: wheat;
+    text-align: center;
+    height: 30px;
+    padding-bottom: 15px;
+    border-radius: 10cap;
+    font-size: 35px;
+    width: 30%; /* Set a fixed width for each block */
+    margin: 10px 0; /* Add some margin */
+  }
+  

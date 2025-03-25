@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Semester</title>
+
+    <script>
+     const currentURL = new URL(window.location.href); 
+     const parts = currentURL.pathname.split('/'); 
+     const regulation = parts[1]; const branch = parts[3]; 
+     const sem = parts[5];
+     function goToPage(subject) { 
+      window.location.href = `/${regulation}/branch/${branch}/sem/${sem}/subject/${subject}`; 
+    }
+    </script>
+</head>
+<style>
+  body {
+    font-family: 'Roboto', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #b32271, #d5d818);
+    color: #ffffff;
+}
+
+.container {
+    width: 90%;
+    max-width: 400px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+h3 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+p {
+    font-size: 1.2em;
+    margin: 15px 0;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+p:hover {
+    background: rgba(255, 255, 255, 0.4);
+    color: #000;
+    transform: scale(1.05);
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+    }
+
+    h3 {
+        font-size: 1.5em;
+    }
+
+    p {
+        font-size: 1em;
+    }
+}
+</style>
+<body>
+    <div class="box">
+      <h3>Select Semester :</h3>
+        <p onclick="goToPage('Python')" style="color:  white; cursor: pointer; " onmouseover="this.style.color='black'" onmouseout="this.style.color='white'">Python</p>
+        <p onclick="goToPage('C Programming')" style="color:  white; cursor: pointer; " onmouseover="this.style.color='black'" onmouseout="this.style.color='white'">C Programming</p>
+        <p onclick="goToPage('C++ Programming')" style="color:  white; cursor: pointer; " onmouseover="this.style.color='black'" onmouseout="this.style.color='white'">C++ Programming</p>
+        <p onclick="goToPage('DBMS')" style="color:  white; cursor: pointer; " onmouseover="this.style.color='black'" onmouseout="this.style.color='white'">DBMS</p>
+        <p onclick="goToPage('Operating systems')" style="color:  white; cursor: pointer; " onmouseover="this.style.color='black'" onmouseout="this.style.color='white'">Operating systems</p>
+        <p onclick="goToPage('Discrete maths')" style="color:  white; cursor: pointer; " onmouseover="this.style.color='black'" onmouseout="this.style.color='white'">Discrete maths</p>
+        <p onclick="goToPage('Product life cycle management')" style="color:  white; cursor: pointer; " onmouseover="this.style.color='black'" onmouseout="this.style.color='white'">Product life cycle management</p>
+        <p onclick="goToPage('Quality management')" style="color:  white; cursor: pointer; " onmouseover="this.style.color='black'" onmouseout="this.style.color='white'">Quality management</p>
+    </div>
+    <div>
+  
+    </div>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link rel="stylesheet" href="authenticate_style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(to bottom, #72cbd1, #e25c62);
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 400px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      position: relative;
+    }
+
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle, rgba(167, 77, 77, 0.2), transparent);
+      z-index: -1;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2em;
+      color: #333;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    label {
+      margin-top: 10px;
+      margin-bottom: 5px;
+      font-size: 1em;
+      color: #333;
+    }
+
+    input {
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+
+    button {
+      padding: 10px;
+      background-color: #080d57;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    #signup_msg {
+      margin-top: 15px;
+      font-size: 0.9em;
+      color: #333;
+    }
+
+    #signup {
+      color: #8374da;
+      cursor: pointer;
+      text-decoration: underline;
+      font-weight: bold;
+    }
+
+    #signup:hover {
+      color: #07e6d3;
+    }
+
+    .floating-elements {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .circle {
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      background: rgba(224, 103, 103, 0.1);
+      border-radius: 50%;
+      border: 2px solid rgb(233, 190, 190);
+      animation: float 10s infinite;
+    }
+
+    .circle:nth-child(1) {
+      top: 10%;
+      left: 20%;
+      animation-duration: 8s;
+    }
+
+    .circle:nth-child(2) {
+      top: 30%;
+      left: 70%;
+      animation-duration: 12s;
+    }
+
+    .circle:nth-child(3) {
+      top: 60%;
+      left: 40%;
+      animation-duration: 15s;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 15px;
+      }
+
+      h1 {
+        font-size: 1.5em;
+      }
+
+      input {
+        font-size: 0.9em;
+      }
+
+      button {
+        font-size: 0.9em;
+      }
+
+      #signup_msg {
+        font-size: 0.8em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="floating-elements">
+    <div class="circle"></div>
+    <div class="circle"></div>
+    <div class="circle"></div>
+  </div>
+  <div class="container">
+    <h1>LOGIN</h1>
+    <form action="/login" method="POST">
+      <label for="regd-number">Regd Number:</label>
+      <input type="text" id="regd-number" name="username" placeholder="Enter your registration number" required>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password" required>
+      <button type="submit">Login</button>
+    </form>
+    <p id="signup_msg">Don't have an account? <mark id="signup">Signup</mark></p>
+  </div>
+  <script>
+    document.getElementById('signup').addEventListener('click', function() {
+      window.location.href = '/signup';
+    });
+  </script>
+</body>
+</html>
