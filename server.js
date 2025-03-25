@@ -5,13 +5,12 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
-
 const app = express();
 const port = 8000;
 
 const mongoURI = 'mongodb+srv://HITMAN:HITMAN2025@cluster0.mo4bh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 mongoose.connect(mongoURI)
-  .then(() => console.log('MongoDB Atlas connected successfully'))
+  .then(() => console.log('MongoDB Atlas connected successfully to web'))
   .catch(err => console.error(err));
   const fileSchema = mongoose.Schema({
     name: String,
