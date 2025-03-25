@@ -1,7 +1,10 @@
 {
   "dependencies": {
     "body-parser": "^1.20.3",
+<<<<<<< HEAD
     "connect-mongo": "^5.1.0",
+=======
+>>>>>>> 950f7188e3f45caf8275562778803207258d46af
     "express": "^4.21.2",
     "express-session": "^1.18.1",
     "mongodb": "^6.12.0",

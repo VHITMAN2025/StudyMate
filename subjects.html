@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -91,3 +92,77 @@ p:hover {
     </div>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Subject</title>
+    <link rel="stylesheet" href="subject.css">
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Example subjects and descriptions
+        const subjects = [
+            { name: "Python Programming Language", description:"displaySubjectDetails"},
+            {name: "Ethics and Huamn Values", description:"display Subject details"},
+            { name: "Design Analysis And Algorithms", description: "Object-oriented programming principles using C++." },
+            { name: "Computer Architecture", description: "Introduction to data organization and manipulation." },
+            { name: "Database Management System", description: "Introduction to data organization and manipulation." },
+            { name: "Quslity Management", description: "Introduction to data organization and manipulation." },
+            { name: "Training And Placement", description: "Introduction to data organization and manipulation." },
+            { name: "Product  And Life Cycle Management", description: "Introduction to data organization and manipulation." }
+            ];
+    
+        const subjectList = document.getElementById('subject-list');
+    
+        // Populate subject buttons dynamically
+        subjects.forEach(subject => {
+            const button = document.createElement('button');
+            button.textContent = subject.name;
+            button.addEventListener('click', () => displaySubjectDetails(subject));
+            subjectList.appendChild(button);
+        });
+    });
+    
+    function displaySubjectDetails(subject) {
+        const detailsContainer = document.getElementById('subject-details');
+        const title = document.getElementById('subject-title');
+        const description = document.getElementById('subject-description');
+    
+        // Update content
+        title.textContent = subject.name;
+        description.textContent = subject.description;
+    
+        // Show details container
+        detailsContainer.style.display = 'block';
+    }
+</script>
+</head>
+<body>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Subject</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h3>Select Subject</h3>
+        <div id="subject-list">
+            <!-- Subject buttons will be populated here -->
+        </div>
+        <div id="subject-details" style="display: none;">
+            <h3 id="subject-title"></h3>
+            <p id="subject-description"></p>
+        </div>
+    </div>
+</body>
+</html>
+
+</body>
+</html>
+>>>>>>> 950f7188e3f45caf8275562778803207258d46af
