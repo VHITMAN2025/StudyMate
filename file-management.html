@@ -161,10 +161,7 @@
             files.forEach(file => {
                 const listItem = document.createElement('li');
                 listItem.innerHTML = `<a href="/view-file/${file._id}">${file.filename}</a>
-<<<<<<< HEAD
                                       <button class="rename-btn" onclick="promptRenameFile('${file._id}')">Rename</button>
-=======
->>>>>>> 950f7188e3f45caf8275562778803207258d46af
                                       <button class="delete-btn" onclick="confirmDeleteFile('${file._id}')">Delete</button>`;
                 fileList.appendChild(listItem);
             });
